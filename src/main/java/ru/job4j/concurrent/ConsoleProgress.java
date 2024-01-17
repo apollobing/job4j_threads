@@ -10,7 +10,7 @@ public class ConsoleProgress implements Runnable {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
-                System.out.println("\nThread was interrupted");
+                System.out.println(System.lineSeparator() + "Thread was interrupted");
                 e.printStackTrace();
                 Thread.currentThread().interrupt();
             }
