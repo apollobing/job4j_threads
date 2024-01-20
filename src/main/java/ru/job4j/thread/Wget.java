@@ -23,20 +23,19 @@ public class Wget implements Runnable {
             System.out.println("Open connection: " + (System.currentTimeMillis() - startAt) + " ms");
             byte[] dataBuffer = new byte[512];
             int bytesRead;
+            int bytesDownloaded = 0;
             while ((bytesRead = input.read(dataBuffer, 0, dataBuffer.length)) != -1) {
-                long downloadAt = System.nanoTime();
+                bytesDownloaded += bytesRead;
                 output.write(dataBuffer, 0, bytesRead);
-                long nano = System.nanoTime() - downloadAt;
-                System.out.println("Downloaded " + bytesRead + " bytes in: " + nano + " ns");
-                int bytesMillisecond = (int) (bytesRead / (double) nano * 1000000);
-                int wait = bytesMillisecond / speed;
-                if (speed < bytesMillisecond) {
+                if (bytesDownloaded >= speed && System.currentTimeMillis() - startAt < 1000) {
                     try {
-                        System.out.println("Wait: " + wait + " ms");
-                        Thread.sleep(wait);
+                        System.out.println("You downloaded " + bytesDownloaded
+                                + " bytes. Wait: " + 1000 + " ms");
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    bytesDownloaded = 0;
                 }
             }
         } catch (IOException e) {
@@ -50,6 +49,9 @@ public class Wget implements Runnable {
     }
 
     public static void main(String[] args) throws InterruptedException {
+        if (args.length < 2) {
+            throw new IllegalArgumentException("Parameters must contain an URL link and a number.");
+        }
         try {
             new URL(args[0]).toURI();
             Integer.parseInt(args[1]);
