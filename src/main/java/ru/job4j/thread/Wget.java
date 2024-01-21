@@ -24,6 +24,7 @@ public class Wget implements Runnable {
             byte[] dataBuffer = new byte[512];
             int bytesRead;
             int bytesDownloaded = 0;
+            startAt = System.currentTimeMillis();
             while ((bytesRead = input.read(dataBuffer, 0, dataBuffer.length)) != -1) {
                 bytesDownloaded += bytesRead;
                 output.write(dataBuffer, 0, bytesRead);
@@ -35,6 +36,7 @@ public class Wget implements Runnable {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    startAt = System.currentTimeMillis();
                     bytesDownloaded = 0;
                 }
             }
