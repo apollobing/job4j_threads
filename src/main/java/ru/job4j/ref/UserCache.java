@@ -1,7 +1,6 @@
 package ru.job4j.ref;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -11,18 +10,22 @@ public class UserCache {
     private final AtomicInteger id = new AtomicInteger();
 
     public void add(User user) {
-        users.put(id.incrementAndGet(), User.of(user.getName()));
+        id.incrementAndGet();
+        User userNew = User.of(user.getName());
+        userNew.setId(id.get());
+        users.put(id.get(), userNew);
     }
 
     public User findById(int id) {
-        return User.of(users.get(id).getName());
+        User userNew = User.of(users.get(id).getName());
+        userNew.setId(id);
+        return userNew;
     }
 
     public List<User> findAll() {
         List<User> userList = new ArrayList<>();
-        Iterator<Integer> iterator = users.keys().asIterator();
-        while (iterator.hasNext()) {
-            userList.add(this.findById(iterator.next()));
+        for (User user : users.values()) {
+            userList.add(this.findById(user.getId()));
         }
         return userList;
     }
