@@ -10,20 +10,24 @@ public class ParseFile {
         this.file = file;
     }
 
-    public synchronized boolean content(Predicate<Character> filter, char character) {
-        return filter.test(character);
+    public synchronized String content(Predicate<Character> filter) throws IOException {
+        try (InputStream input = new BufferedInputStream(new FileInputStream(file))) {
+            StringBuilder output = new StringBuilder();
+            int data;
+            while ((data = input.read()) > 0) {
+                if (filter.test((char) data)) {
+                    output.append((char) data);
+                }
+            }
+            return output.toString();
+        }
     }
 
     public synchronized String getContent() throws IOException {
-        try (InputStream input = new BufferedInputStream(new FileInputStream(file))) {
-            String output = "";
-            int data;
-            while ((data = input.read()) > 0) {
-                if (content(character -> character < 0x80, (char) data)) {
-                    output += (char) data;
-                }
-            }
-            return output;
-        }
+        return content(character -> true);
+    }
+
+    public synchronized String getContentWithoutUnicode() throws IOException {
+        return content(character -> character < 0x80);
     }
 }
