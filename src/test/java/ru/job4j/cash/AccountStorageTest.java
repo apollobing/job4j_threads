@@ -68,4 +68,22 @@ class AccountStorageTest {
         boolean result = storage.transfer(1, 2, 75);
         assertThat(result).isEqualTo(false);
     }
+
+    @Test
+    void whenTransferToNonExistentIdFailed() {
+        var storage = new AccountStorage();
+        storage.add(new Account(1, 750));
+        storage.add(new Account(2, 100));
+        boolean result = storage.transfer(1, 3, 75);
+        assertThat(result).isEqualTo(false);
+    }
+
+    @Test
+    void whenTransferFromNonExistentIdFailed() {
+        var storage = new AccountStorage();
+        storage.add(new Account(1, 750));
+        storage.add(new Account(2, 100));
+        boolean result = storage.transfer(3, 2, 75);
+        assertThat(result).isEqualTo(false);
+    }
 }
