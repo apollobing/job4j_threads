@@ -10,25 +10,17 @@ public class UserCache {
     private final AtomicInteger id = new AtomicInteger();
 
     public void add(User user) {
-        id.incrementAndGet();
-        User userNew = User.of(user.getName());
-        userNew.setId(id.get());
-        users.put(id.get(), userNew);
+        users.put(id.incrementAndGet(), User.of(user.getName()));
     }
 
     public User findById(int id) {
-        User userNew = User.of(users.get(id).getName());
-        userNew.setId(id);
-        return userNew;
+        return User.of(users.get(id).getName());
     }
 
     public List<User> findAll() {
-        int id = 0;
         List<User> userList = new ArrayList<>();
         for (User user : users.values()) {
-            User userNew = User.of(user.getName());
-            userNew.setId(++id);
-            userList.add(userNew);
+            userList.add(User.of(user.getName()));
         }
         return userList;
     }
