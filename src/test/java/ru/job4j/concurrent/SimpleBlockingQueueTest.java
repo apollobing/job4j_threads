@@ -15,14 +15,22 @@ class SimpleBlockingQueueTest {
         Thread producer = new Thread(
                 () -> {
                     for (int i = 0; i < 5; i++) {
-                        simpleBlockingQueue.offer(i);
+                        try {
+                            simpleBlockingQueue.offer(i);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
         );
         Thread consumer = new Thread(
                 () -> {
                     for (int i = 0; i < 5; i++) {
-                        nums.add(simpleBlockingQueue.poll());
+                        try {
+                            nums.add(simpleBlockingQueue.poll());
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
         );
@@ -38,7 +46,13 @@ class SimpleBlockingQueueTest {
         SimpleBlockingQueue<Integer> simpleBlockingQueue = new SimpleBlockingQueue<>(5);
         List<Integer> nums = new ArrayList<>();
         Thread consumer = new Thread(
-                () -> nums.add(simpleBlockingQueue.poll())
+                () -> {
+                    try {
+                        nums.add(simpleBlockingQueue.poll());
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
         );
         consumer.start();
         assertThat(nums.size()).isEqualTo(0);
