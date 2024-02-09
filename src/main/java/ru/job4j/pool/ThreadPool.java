@@ -29,12 +29,8 @@ public class ThreadPool {
         }
     }
 
-    public void work(Runnable job) {
-        try {
-            tasks.offer(job);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+    public void work(Runnable job) throws InterruptedException {
+        tasks.offer(job);
     }
 
     public void shutdown() {
