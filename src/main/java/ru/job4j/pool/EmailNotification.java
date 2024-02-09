@@ -33,6 +33,13 @@ public class EmailNotification {
 
     public void close() {
         pool.shutdown();
+        while (!pool.isTerminated()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static void main(String[] args) {
@@ -42,12 +49,5 @@ public class EmailNotification {
         emailNotification.emailTo(user);
         emailNotification.emailTo(user1);
         emailNotification.close();
-        while (!emailNotification.pool.isTerminated()) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
     }
 }
