@@ -31,14 +31,13 @@ public class ParallelFindIndex<T> extends RecursiveTask<Integer> {
     protected Integer compute() {
         if (to - from <= 10) {
             return search();
-        } else {
-            int middle = (from + to) / 2;
-            RecursiveTask<Integer> left = new ParallelFindIndex<>(from, middle, array, searchFor);
-            RecursiveTask<Integer> right = new ParallelFindIndex<>(middle, to, array, searchFor);
-            left.fork();
-            right.fork();
-            return Math.max(left.join(), right.join());
         }
+        int middle = (from + to) / 2;
+        RecursiveTask<Integer> left = new ParallelFindIndex<>(from, middle, array, searchFor);
+        RecursiveTask<Integer> right = new ParallelFindIndex<>(middle, to, array, searchFor);
+        left.fork();
+        right.fork();
+        return Math.max(left.join(), right.join());
     }
 
     public static <T> int find(T[] array, T searchFor) {
