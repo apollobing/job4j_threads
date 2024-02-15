@@ -3,28 +3,7 @@ package ru.job4j.pools;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-public class RolColSum {
-    public static class Sums {
-        private int rowSum;
-        private int colSum;
-
-        public int getRowSum() {
-            return rowSum;
-        }
-
-        public void setRowSum(int rowSum) {
-            this.rowSum = rowSum;
-        }
-
-        public int getColSum() {
-            return colSum;
-        }
-
-        public void setColSum(int colSum) {
-            this.colSum = colSum;
-        }
-    }
-
+public class RowColSum {
     public static Sums[] sum(int[][] matrix) {
         Sums[] result = new Sums[matrix.length];
         Sums sum = new Sums();
@@ -77,13 +56,13 @@ public class RolColSum {
         int[][] arr = new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
         Sums[] rslLinear = sum(arr);
         for (Sums el : rslLinear) {
-            System.out.println(el.rowSum);
-            System.out.println(el.colSum);
+            System.out.println(el.getRowSum());
+            System.out.println(el.getColSum());
         }
         Sums[] rslAsync = asyncSum(arr);
         for (Sums el : rslAsync) {
-            System.out.println(el.rowSum);
-            System.out.println(el.colSum);
+            System.out.println(el.getRowSum());
+            System.out.println(el.getColSum());
         }
     }
 }
